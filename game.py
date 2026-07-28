@@ -1,5 +1,6 @@
 import pygame
 import sys
+import help  # Импортируем наш новый файл help.py
 
 # Инициализация библиотеки
 pygame.init()
@@ -7,7 +8,7 @@ pygame.init()
 # Настройки окна игры
 WIDTH, HEIGHT = 800, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Мини-Майнкрафт 2D")
+pygame.display.set_caption("Мини-Майнкрафт 2D с подсказками")
 
 # Цвета (RGB)
 SKY_BLUE = (135, 206, 235)
@@ -21,7 +22,7 @@ BLOCK_SIZE = 40
 COLS = WIDTH // BLOCK_SIZE
 ROWS = HEIGHT // BLOCK_SIZE
 
-# Генерация плоского мира (0-воздух, 1-трава, 2-земля, 3-камень)
+# Генерация плоского мира
 world = []
 for row in range(ROWS):
     world_row = []
@@ -36,7 +37,7 @@ for row in range(ROWS):
             world_row.append(3)  
     world.append(world_row)
 
-# Параметры игрока (красный квадрат)
+# Параметры игрока
 player_x = WIDTH // 2
 player_y = (ROWS // 2 - 1) * BLOCK_SIZE
 player_speed = 5
@@ -46,15 +47,13 @@ clock = pygame.time.Clock()
 running = True
 
 while running:
-    # Ограничение FPS
     clock.tick(60)
     
-    # Отслеживание закрытия окна
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
             
-    # Управление персонажем (Стрелки влево / вправо)
+    # Управление персонажем
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT] and player_x > 0:
         player_x -= player_speed
@@ -80,6 +79,10 @@ while running:
 
     # Отрисовка игрока
     pygame.draw.rect(screen, RED, (player_x, player_y, BLOCK_SIZE, BLOCK_SIZE))
+
+    # ЕСЛИ НАЖАТА КЛАВИША 'H' — вызываем функцию меню из help.py
+    if keys[pygame.K_h]:
+        help.draw_help_menu(screen)
 
     # Обновление экрана
     pygame.display.flip()
